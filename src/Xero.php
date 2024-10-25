@@ -136,7 +136,7 @@ class Xero extends Plugin
     {
         // Send completed and paid orders off to Xero (30 second delay)
         Event::on(Order::class, Order::EVENT_AFTER_ORDER_PAID, function(Event $event) {
-            Craft::$app->queue->delay(30)->push(new SendToXero([
+            Craft::$app->getQueue()->delay(30)->push(new SendToXero([
                 'orderId' => $event->sender->id,
             ]));
         });
