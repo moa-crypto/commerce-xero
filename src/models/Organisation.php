@@ -166,7 +166,7 @@ class Organisation extends SavableComponent implements OAuthProviderInterface, S
 
     public function getName(): ?string
     {
-        return $this->getTenant()?->tenantName ?? null;
+        return $this->getTenant()?->tenantName ?? Craft::t('commerce-xero', 'Tenant');
     }
 
     public function getProfile(): ?Profile
