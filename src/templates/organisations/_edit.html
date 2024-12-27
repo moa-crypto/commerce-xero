@@ -63,7 +63,7 @@
 
         <input type="hidden" name="organisationId" value="{{ organisation.id }}">
     {% else %}
-        <p class="warning with-icon">{{ 'Save this organisation (as disabled) to continue.' | t('commerce-xero') }}</p>
+        <p class="warning with-icon">{{ 'Save this organisation to continue.' | t('commerce-xero') }}</p>
     {% endif %}
 
     {{ actionInput('commerce-xero/organisations/save') }}

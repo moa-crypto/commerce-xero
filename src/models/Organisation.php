@@ -66,7 +66,7 @@ class Organisation extends SavableComponent implements OAuthProviderInterface, S
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['accountSales', 'accountReceivable', 'accountShipping', 'accountRounding'], 'required', 'when' => fn() => $this->enabled];
+        $rules[] = [['accountSales', 'accountReceivable', 'accountShipping', 'accountRounding'], 'required', 'when' => fn() => $this->enabled && $this->isConnected()];
         $rules[] = [['id'], 'number', 'integerOnly' => true];
 
         return $rules;
