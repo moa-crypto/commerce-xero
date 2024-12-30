@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.0.1 - 2024-12-31
+
+### Fixed
+- Fix organisation validation occurring before being connected.
+- Fix lack of error handling for organisations that have lost their connection.
+- Fix lack of organisation name when saved, but not connected to a tenant.
+- Improve instruction text for new organisations.
+
 ## 2.0.0 - 2024-10-22
 > {note} The plugin’s package name has changed to `verbb/xero`. Xero will need be updated to 2.0 from a terminal, by running `composer require verbb/xero && composer remove thejoshsmith/commerce-xero`.
 
