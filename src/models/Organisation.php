@@ -66,7 +66,7 @@ class Organisation extends SavableComponent implements OAuthProviderInterface, S
     {
         $rules = parent::defineRules();
 
-        $rules[] = [['accountSales', 'accountReceivable', 'accountShipping', 'accountRounding'], 'required', 'when' => fn() => $this->enabled];
+        $rules[] = [['accountSales', 'accountReceivable', 'accountShipping', 'accountRounding'], 'required', 'when' => fn() => $this->enabled && $this->isConnected()];
         $rules[] = [['id'], 'number', 'integerOnly' => true];
 
         return $rules;
@@ -166,7 +166,7 @@ class Organisation extends SavableComponent implements OAuthProviderInterface, S
 
     public function getName(): ?string
     {
-        return $this->getTenant()?->tenantName ?? null;
+        return $this->getTenant()?->tenantName ?? Craft::t('commerce-xero', 'Tenant');
     }
 
     public function getProfile(): ?Profile
@@ -175,12 +175,27 @@ class Organisation extends SavableComponent implements OAuthProviderInterface, S
             return $this->_profile;
         }
 
-        $token = $this->getToken()?->getToken() ?? null;
+        try {
+            $token = $this->getToken()?->getToken() ?? null;
 
-        if ($token) {
-            $resourceData = $this->getOAuthProvider()->getResourceOwner($token) ?? [];
+            if ($token) {
+                $resourceData = $this->getOAuthProvider()->getResourceOwner($token) ?? [];
 
-            $this->_profile = new Profile($resourceData);
+                $this->_profile = new Profile($resourceData);
+            }
+        } catch (Throwable $e) {
+            $messageText = $e->getMessage();
+
+            // Check for Guzzle errors, which are truncated in the exception `getMessage()`.
+            if ($e instanceof RequestException && $e->getResponse()) {
+                $messageText = (string)$e->getResponse()->getBody()->getContents();
+            }
+
+            Xero::error(Craft::t('commerce-xero', 'API error: “{message}” {file}:{line}', [
+                'message' => $messageText,
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ]));
         }
 
         return $this->_profile;

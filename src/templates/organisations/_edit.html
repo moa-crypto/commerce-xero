@@ -58,9 +58,14 @@
         <em>{{ 'Please ask your developer to action this.' | t('commerce-xero') }}</em>
     {% endif %}
 {% elseif not organisation.isConnected() %}
-    <p class="warning with-icon">{{ 'Connect your Xero organisation to continue.' | t('commerce-xero') }}</p>
-    
-    {% if organisation.id %}<input type="hidden" name="organisationId" value="{{ organisation.id }}">{% endif %}
+    {% if organisation.id %}
+        <p class="warning with-icon">{{ 'Connect your Xero organisation to continue.' | t('commerce-xero') }}</p>
+
+        <input type="hidden" name="organisationId" value="{{ organisation.id }}">
+    {% else %}
+        <p class="warning with-icon">{{ 'Save this organisation to continue.' | t('commerce-xero') }}</p>
+    {% endif %}
+
     {{ actionInput('commerce-xero/organisations/save') }}
     {{ redirectInput('xero/organisations') }}
 {% else %}
